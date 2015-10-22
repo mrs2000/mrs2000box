@@ -4,26 +4,33 @@
 		<meta charset="utf-8">
 		<title>mrs2000box</title>
 		<link href="/mrs2000box.css" media="all" rel="stylesheet" />
+        <style>
+            html {
+                margin: 0;
+                padding: 0;
+                position: relative;
+            }
+            body {
+                position: relative;
+                margin: 0;
+                padding: 0;
+            }
+        </style>
 	</head>
-    <style>
-        html {
-            margin: 0;
-            padding: 0;
-            position: relative;
-        }
-        body {
-            position: relative;
-            margin: 0;
-            padding: 0;
-        }
-    </style>
 	<body>
 		<div class="test1">
 			<a href="http://lorempixel.com/300/200/people/1/" title="aaa" rel="1"><img src="http://lorempixel.com/200/200/people/1/"></a>
-            <a href="http://lorempixel.com/1300/300/people/2/" title="bbb" rel="2"><img src="http://lorempixel.com/200/200/people/2/"></a>
+<!--            <a href="http://lorempixel.com/1300/300/people/2/" title="bbb" rel="2"><img src="http://lorempixel.com/200/200/people/2/"></a>
             <a href="http://lorempixel.com/600/1200/people/3/" title="bbb asdf asf asfasf asfjkasfh sfjshfsa fasjhf sfjhaskl fhsa" ><img src="http://lorempixel.com/200/200/people/3/"></a>
-            <a href="/no-found.jpg"><img src="http://lorempixel.com/200/200/people/4/"></a>
+            <a href="/no-found.jpg"><img src="http://lorempixel.com/200/200/people/4/"></a>-->
 		</div>
+
+        <div class="test2">
+            <a href="http://lorempixel.com/300/200/sports/1/" title="aaa" rel="1"><img src="http://lorempixel.com/100/100/sports/1/"></a>
+            <a href="http://lorempixel.com/300/200/sports/2/" title="bbb" rel="2"><img src="http://lorempixel.com/100/100/sports/2/"></a>
+            <a href="http://lorempixel.com/300/200/sports/3/" title="bbb asdf asf asfasf asfjkasfh sfjshfsa fasjhf sfjhaskl fhsa" ><img src="http://lorempixel.com/100/100/sports/3/"></a>
+            <a href="/no-found.jpg"><img src="http://lorempixel.com/100/100/sports/"></a>
+        </div>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 		<script src="/jquery.mrs2000box.js"></script>
@@ -31,7 +38,9 @@
 		<script>
             $(document).ready(function () {
 
-                $('.test1').mrs2000box();
+                $('.test1').mrs2000box({showGallery: true});
+
+                $('.test2').mrs2000box({showGallery: true});
 
             });
         </script>

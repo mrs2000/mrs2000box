@@ -1,27 +1,31 @@
 ﻿/**
- *  Created by Melnikov R.S. on 21.08.2015
+ *  jQuery плагин для показа изображений
+ *  Автор - mrs2000
+ *  21.08.2015
  */
+
 (function ($) {
     jQuery.fn.mrs2000box = function (options) {
 
         options = $.extend({
             showTitle: true,
             showNumber: true,
-            showGallery: true
+            showGallery: false
         }, options);
 
-        var $spinner,
-            $shadow,
-            $image,
-            buffer,
-            $frame,
-            $left,
-            $right,
-            $title,
-            $error;
+        var $spinner = null;
+        var $shadow = null;
+        var $image = null;
+        var $frame = null;
+        var $left = null;
+        var $right = null;
+        var $close = null;
+        var $title = null;
+        var $error = null;
 
         var list = [],
-            current,
+            current = 0,
+            buffer = null,
             directional = 1;
 
         var imageWidth, imageHeight, showTitle;
@@ -31,22 +35,28 @@
 
         function create() {
 
-            if ($('.m2b-shadow').length > 0) return;
+            $shadow = $('.m2b-shadow');
+            if ($shadow.length == 0) {
+                $shadow = $('<div class="m2b-shadow"></div>');
+                $shadow.appendTo('body').click(close);
 
-            $shadow = $('<div class="m2b-shadow"></div>');
-            $shadow.appendTo('body').click(close);
+                $frame = $('<div class="m2b-frame"><div class="m2b-shadow2"></div>' +
+                    '<div class="m2b-spinner"><div class="m2b-double-bounce1"></div><div class="m2b-double-bounce2"></div></div>' +
+                    '<img class="m2b-image"><div class="m2b-error"></div><div class="m2b-left"></div><div class="m2b-right"></div>' +
+                    '<div class="m2b-btn-close"></div><div class="m2b-title"></div></div>');
+                $frame.appendTo('body');
 
-            $frame = $('<div class="m2b-frame"><div class="m2b-shadow2"></div>' +
-                '<div class="m2b-spinner"><div class="m2b-double-bounce1"></div><div class="m2b-double-bounce2"></div></div>' +
-                '<img class="m2b-image"><div class="m2b-error"></div><div class="m2b-left"></div><div class="m2b-right"></div>' +
-                '<div class="m2b-btn-close"></div><div class="m2b-title"></div></div>');
-            $frame.appendTo('body');
+            } else {
+                $frame = $('.m2b-frame');
+                $frame.show();
+                $shadow.show();
+            }
 
             $spinner = $frame.find('.m2b-spinner');
 
             $image = $frame.find('.m2b-image');
             $image.hide().load(function () {
-                if ((options.showNumber || options.showTitle) && $title.html() != '') {
+                if ((options.showNumber || options.showTitle)) {
                     showTitle = true;
                     $title.show();
                 }
@@ -69,22 +79,16 @@
             }
 
             $error = $frame.find('.m2b-error');
+            $error.hide();
 
-            $frame.find('.m2b-btn-close').click(close);
-
-            function preloadNext() {
-                if (list.length > 1) {
-                    bufferWait = false;
-                    bufferCurrent = directional == 1 ? getNextId() : getPrevId();
-                    buffer.src = list[bufferCurrent].href;
-                }
-            }
+            $close = $frame.find('.m2b-btn-close');
+            $close.click(close);
 
             buffer = new Image;
             buffer.onload = function () {
                 if (bufferWait) {
-                    imageWidth = buffer.width;
-                    imageHeight = buffer.height;
+                    imageWidth = buffer.naturalWidth;
+                    imageHeight = buffer.naturalHeight;
                     $image.attr('src', buffer.src).show();
                     isReady = true;
                     preloadNext()
@@ -96,31 +100,35 @@
             buffer.onerror = function () {
                 if (bufferWait) {
                     $error.show();
+                    $image.hide();
                     $spinner.hide();
                     isReady = true;
                     preloadNext();
                 }
             };
 
-            $(window).resize(function () {
-                setImageSize();
-            });
+            $(window).bind('resize', resize);
+            $(document).bind('keyup', keyup);
+        }
 
-            $(document).keyup(function (e) {
-                if (isShow) {
-                    switch (e.which) {
-                        case 27:
-                            close();
-                            break;
-                        case 37:
-                            loadPrev();
-                            break;
-                        case 39:
-                            loadNext();
-                            break;
-                    }
+        function resize() {
+            if (isShow) setImageSize();
+        }
+
+        function keyup(e) {
+            if (isShow) {
+                switch (e.which) {
+                    case 27:
+                        close();
+                        break;
+                    case 37:
+                        loadPrev();
+                        break;
+                    case 39:
+                        loadNext();
+                        break;
                 }
-            });
+            }
         }
 
         function setImageSize() {
@@ -148,7 +156,9 @@
         }
 
         function load() {
-            $title.html(list[current].title).hide();
+            if (options.showTitle || options.showNumber) {
+                $title.html(list[current].title).hide();
+            }
 
             $image.hide();
             $spinner.show();
@@ -157,6 +167,14 @@
             bufferWait = true;
             bufferCurrent = current;
             buffer.src = list[current].href;
+        }
+
+        function preloadNext() {
+            if (list.length > 1) {
+                bufferWait = false;
+                bufferCurrent = directional == 1 ? getNextId() : getPrevId();
+                buffer.src = list[bufferCurrent].href;
+            }
         }
 
         function getPrevId() {
@@ -196,15 +214,11 @@
             return title + element.title;
         }
 
-        function init($obj) {
+        function init() {
+            var $obj = $(this);
             $obj.on('click', 'a', function (e) {
                 e.preventDefault();
-                if ($shadow == null) {
-                    create();
-                } else {
-                    $shadow.show();
-                    $frame.show();
-                }
+                create();
 
                 list = [];
 
@@ -240,11 +254,14 @@
         function close() {
             $shadow.hide();
             $frame.hide();
+            $left.unbind('click');
+            $right.unbind('click');
+            $close.unbind('click');
+            $(window).unbind('resize', resize);
+            $(document).unbind('keyup', keyup);
             isShow = false;
         }
 
-        return $(this).each(function () {
-            init($(this))
-        });
+        return $(this).each(init);
     }
 })(jQuery);
