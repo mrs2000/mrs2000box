@@ -1,7 +1,8 @@
 ﻿/**
  *  jQuery плагин для показа изображений
- *  Автор - mrs2000
- *  21.08.2015
+ *
+ *  @author Melnikov R.S.
+ *  @version 1.0.0
  */
 
 (function ($) {
@@ -10,8 +11,15 @@
         options = $.extend({
             showTitle: true,
             showNumber: true,
-            showGallery: false
+            showGallery: false,
+            advanced: false // depricated
         }, options);
+
+        if (options.advanced) {
+            options.showGallery = true;
+            options.showTitle = true;
+            options.showNumber = true;
+        }
 
         var $spinner = null;
         var $shadow = null;
@@ -138,6 +146,7 @@
                 width, height;
 
             if (showTitle) {
+                //noinspection JSValidateTypes
                 fh -= $title.outerHeight();
             }
 
@@ -215,7 +224,18 @@
         }
 
         function init() {
-            var $obj = $(this);
+
+            var $obj;
+            if (this.tagName == 'A') {
+                $obj = $(this).parent();
+                if ($obj.data('m2b')) {
+                    return;
+                }
+                $obj.data('m2b', true);
+            } else {
+                $obj = $(this);
+            }
+
             $obj.on('click', 'a', function (e) {
                 e.preventDefault();
                 create();
