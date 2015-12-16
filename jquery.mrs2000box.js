@@ -2,7 +2,7 @@
  *  jQuery плагин для показа изображений
  *
  *  @author Melnikov R.S.
- *  @version 1.0.0
+ *  @version 1.0.2
  */
 
 (function ($) {
@@ -12,7 +12,9 @@
             showTitle: true,
             showNumber: true,
             showGallery: false,
-            advanced: false // depricated
+            advanced: false, // depricated
+            onLoad: null,
+            onResize: null
         }, options);
 
         if (options.advanced) {
@@ -63,18 +65,7 @@
             $spinner = $frame.find('.m2b-spinner');
 
             $image = $frame.find('.m2b-image');
-            $image.hide().load(function () {
-                if ((options.showNumber || options.showTitle)) {
-                    showTitle = true;
-                    $title.show();
-                }
-                setImageSize();
-                $spinner.hide();
-            }).click(function () {
-                if (list.length < 2 || !options.showGallery) {
-                    close();
-                }
-            });
+            $image.hide().load(onImageLoad).click(onImageClick);
 
             $left = $frame.find('.m2b-left');
             $right = $frame.find('.m2b-right');
@@ -99,8 +90,7 @@
                     imageHeight = buffer.naturalHeight;
                     $image.attr('src', buffer.src).show();
                     isReady = true;
-                    preloadNext()
-
+                    preloadNext();
                 } else {
                     bufferWait = true;
                 }
@@ -115,15 +105,26 @@
                 }
             };
 
-            $(window).bind('resize', resize);
-            $(document).bind('keyup', keyup);
+            $(window).bind('resize', onResize);
+            $(document).bind('keyup', onKeyup);
         }
 
-        function resize() {
-            if (isShow) setImageSize();
+        function onResize() {
+            if (isShow) {
+                setImageSize();
+                if (options.onResize) {
+                    var e = {
+                        width: imageWidth,
+                        height: imageHeight,
+                        object: list[current].object,
+                        img: $image
+                    };
+                    options.onResize(e);
+                }
+            }
         }
 
-        function keyup(e) {
+        function onKeyup(e) {
             if (isShow) {
                 switch (e.which) {
                     case 27:
@@ -150,7 +151,7 @@
                 fh -= $title.outerHeight();
             }
 
-            if (s > 1) {
+            if (s > fw / fh) {
                 width = imageWidth > fw ? fw : imageWidth;
                 height = width / s;
             } else {
@@ -162,6 +163,30 @@
                 top = fh * 0.5 - height * 0.5;
 
             $image.css({top: top, left: left, width: width, height: height})
+        }
+
+        function onImageLoad() {
+            if ((options.showNumber || options.showTitle)) {
+                showTitle = true;
+                $title.show();
+                if (options.onLoad) {
+                    var e = {
+                        width: imageWidth,
+                        height: imageHeight,
+                        object: list[current].object,
+                        img: this
+                    };
+                    options.onLoad(e);
+                }
+            }
+            setImageSize();
+            $spinner.hide();
+        }
+
+        function onImageClick() {
+            if (list.length < 2 || !options.showGallery) {
+                close();
+            }
         }
 
         function load() {
@@ -247,12 +272,14 @@
                     $obj.find('a').each(function (index, element) {
                         if (element == item) current = index;
                         list.push({
+                            object: element,
                             href: element.href,
                             title: getTitle(element)
                         });
                     });
                 } else {
                     list.push({
+                        object: this,
                         href: this.href,
                         title: getTitle(this)
                     });
@@ -277,8 +304,10 @@
             $left.unbind('click');
             $right.unbind('click');
             $close.unbind('click');
-            $(window).unbind('resize', resize);
-            $(document).unbind('keyup', keyup);
+            $image.unbind('load');
+            $image.unbind('click');
+            $(window).unbind('resize', onResize);
+            $(document).unbind('keyup', onKeyup);
             isShow = false;
         }
 

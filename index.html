@@ -19,8 +19,8 @@
 	</head>
 	<body>
 		<div>
-			<a class="test1" href="http://lorempixel.com/300/200/people/1/" title="aaa" rel="1"><img src="http://lorempixel.com/200/200/people/1/"></a>
-            <a class="test1" href="http://lorempixel.com/1300/300/people/2/" title="bbb" rel="2"><img src="http://lorempixel.com/200/200/people/2/"></a>
+			<a class="test1" href="http://price.novator-group.ru/i/5/e/5ed852.jpg" title="aaa" rel="1"><img src="http://lorempixel.com/200/200/people/1/"></a>
+            <a class="test1" href="http://lorempixel.com/1300/300/people/2/" data-my-id="ttt" title="bbb" rel="2"><img src="http://lorempixel.com/200/200/people/2/"></a>
             <a class="test1" href="http://lorempixel.com/600/1200/people/3/" title="bbb asdf asf asfasf asfjkasfh sfjshfsa fasjhf sfjhaskl fhsa" ><img src="http://lorempixel.com/200/200/people/3/"></a>
             <a class="test1" href="/no-found.jpg"><img src="http://lorempixel.com/200/200/people/4/"></a>
 		</div>
@@ -37,11 +37,11 @@
 
 		<script>
             $(document).ready(function () {
-
-                $('.test1').mrs2000box({showGallery: true});
-
+                $('.test1').mrs2000box({showGallery: true, onLoad: function (e) {
+                    console.log(e);
+                    console.log($(e.object).data('my-id'));
+                }});
                 $('.test2').mrs2000box({showGallery: true});
-
             });
         </script>
 	</body>
