@@ -13,6 +13,7 @@
             showNumber: true,
             showGallery: false,
             advanced: false, // depricated
+            onBeforeLoad: null,
             onLoad: null,
             onResize: null
         }, options);
@@ -190,6 +191,9 @@
         }
 
         function load() {
+            if (options.onBeforeLoad) {
+                options.onBeforeLoad({img: $image});
+            }
             if (options.showTitle || options.showNumber) {
                 $title.html(list[current].title).hide();
             }
