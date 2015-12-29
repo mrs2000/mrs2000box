@@ -15,7 +15,8 @@
             advanced: false, // depricated
             onBeforeLoad: null,
             onLoad: null,
-            onResize: null
+            onResize: null,
+            onClose: null
         }, options);
 
         if (options.advanced) {
@@ -167,18 +168,18 @@
         }
 
         function onImageLoad() {
-            if ((options.showNumber || options.showTitle)) {
+            if ($title.html() != '') {
                 showTitle = true;
                 $title.show();
-                if (options.onLoad) {
-                    var e = {
-                        width: imageWidth,
-                        height: imageHeight,
-                        object: list[current].object,
-                        img: this
-                    };
-                    options.onLoad(e);
-                }
+            }
+            if (options.onLoad) {
+                var e = {
+                    width: imageWidth,
+                    height: imageHeight,
+                    object: list[current].object,
+                    img: this
+                };
+                options.onLoad(e);
             }
             setImageSize();
             $spinner.hide();
@@ -313,6 +314,9 @@
             $(window).unbind('resize', onResize);
             $(document).unbind('keyup', onKeyup);
             isShow = false;
+            if (options.onClose) {
+                options.onClose();
+            }
         }
 
         return $(this).each(init);
