@@ -2,10 +2,13 @@
  *  jQuery плагин для показа изображений
  *
  *  @author Melnikov R.S.
- *  @version 1.0.2
+ *  @version 1.0.4
  */
 
 (function ($) {
+
+    'use strict';
+
     jQuery.fn.mrs2000box = function (options) {
 
         options = $.extend({
