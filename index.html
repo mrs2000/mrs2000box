@@ -32,16 +32,22 @@
             <a href="/no-found.jpg"><img src="http://lorempixel.com/100/100/sports/"></a>
         </div>
 
+        <button id="show-img" >Показать</button>
+
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 		<script src="/jquery.mrs2000box.js"></script>
 
 		<script>
             $(document).ready(function () {
                 $('.test1').mrs2000box({showGallery: true, onLoad: function (e) {
-                    console.log(e);
-                    console.log($(e.object).data('my-id'));
+                    //console.log(e);
+                    //console.log($(e.object).data('my-id'));
                 }});
                 $('.test2 a').mrs2000box({showGallery: false});
+
+                $('#show-img').click(function () {
+                    $('.test2').mrs2000box('show', 2);
+                })
             });
         </script>
 	</body>

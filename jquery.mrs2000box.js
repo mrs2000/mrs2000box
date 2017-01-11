@@ -2,31 +2,14 @@
  *  jQuery плагин для показа изображений
  *
  *  @author Melnikov R.S.
- *  @version 1.0.5
+ *  @version 1.0.6
  */
 
 (function ($) {
 
     'use strict';
 
-    jQuery.fn.mrs2000box = function (options) {
-
-        options = $.extend({
-            showTitle: true,
-            showNumber: true,
-            showGallery: false,
-            advanced: false, // depricated
-            onBeforeLoad: null,
-            onLoad: null,
-            onResize: null,
-            onClose: null
-        }, options);
-
-        if (options.advanced) { // depricated
-            options.showGallery = true;
-            options.showTitle = true;
-            options.showNumber = true;
-        }
+    jQuery.fn.mrs2000box = function (options, params) {
 
         var $spinner = null;
         var $shadow = null;
@@ -47,6 +30,44 @@
         var isReady = false, isShow = false;
 
         var bufferWait = true, bufferCurrent;
+
+        if ($.isPlainObject(options)) {
+            options = $.extend({
+                showTitle: true,
+                showNumber: true,
+                showGallery: false,
+                advanced: false, // depricated
+                onBeforeLoad: null,
+                onLoad: null,
+                onResize: null,
+                onClose: null
+            }, options);
+
+            if (options.advanced) { // depricated
+                options.showGallery = true;
+                options.showTitle = true;
+                options.showNumber = true;
+            }
+        } else {
+            //Методы
+            var $wrapper = getWrapper(this);
+            if ($wrapper) {
+                //Показать фото
+                if (options === 'show') {
+                    var index = typeof params === 'undefined' ? 0 : params;
+                    var $a;
+                    if ($wrapper.data('m2b-wrapper')) {
+                        $a = $wrapper.find('a').eq(index);
+                    } else {
+                        $a = $wrapper.eq(index);
+                    }
+                    options = $wrapper.data('m2b-options');
+                    //current = index;
+                    show($wrapper, $a[0]);
+                }
+            }
+            return;
+        }
 
         /**
          * Создание фрейма
@@ -300,57 +321,66 @@
             return title + element.title;
         }
 
+        function getWrapper(element) {
+            var $wrapper;
+            if (element.tagName == 'A') {
+                $wrapper = $(element).parent();
+                if ($wrapper.data('m2b')) {
+                    return;
+                }
+                $wrapper.data('m2b-wrapper', true);
+            } else {
+                $wrapper = $(element);
+            }
+
+            $wrapper.data('m2b', true);
+            return $wrapper;
+        }
+
+        function show($wrapper, item) {
+            create();
+            list = [];
+            if (options.showGallery) {
+                $wrapper.find('a').each(function (index, element) {
+                    if (element == item) current = index;
+                    list.push({
+                        object: element,
+                        href: element.href,
+                        title: getTitle(element)
+                    });
+                });
+            } else {
+                list.push({
+                    object: item,
+                    href: item.href,
+                    title: getTitle(item)
+                });
+            }
+
+            if (list.length > 1 && options.showGallery) {
+                $left.show();
+                $right.show();
+            } else {
+                $left.hide();
+                $right.hide();
+            }
+
+            load();
+            isShow = true;
+        }
+
         /**
          * Инициализация плагина
          */
         function init() {
-
-            var $obj;
-            if (this.tagName == 'A') {
-                $obj = $(this).parent();
-                if ($obj.data('m2b')) {
-                    return;
-                }
-                $obj.data('m2b', true);
-            } else {
-                $obj = $(this);
+            var $wrapper = getWrapper(this);
+            if ($wrapper) {
+                $wrapper.data('m2b-options', options);
+                $wrapper.on('click', 'a', function (e) {
+                    e.preventDefault();
+                    show($wrapper, this);
+                });
             }
-
-            $obj.on('click', 'a', function (e) {
-                e.preventDefault();
-                create();
-
-                list = [];
-
-                if (options.showGallery) {
-                    var item = this;
-                    $obj.find('a').each(function (index, element) {
-                        if (element == item) current = index;
-                        list.push({
-                            object: element,
-                            href: element.href,
-                            title: getTitle(element)
-                        });
-                    });
-                } else {
-                    list.push({
-                        object: this,
-                        href: this.href,
-                        title: getTitle(this)
-                    });
-                }
-
-                if (list.length > 1 && options.showGallery) {
-                    $left.show();
-                    $right.show();
-                } else {
-                    $left.hide();
-                    $right.hide();
-                }
-
-                load();
-                isShow = true;
-            });
         }
 
         /**
