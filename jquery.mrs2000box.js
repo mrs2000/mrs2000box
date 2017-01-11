@@ -2,7 +2,7 @@
  *  jQuery плагин для показа изображений
  *
  *  @author Melnikov R.S.
- *  @version 1.0.4
+ *  @version 1.0.5
  */
 
 (function ($) {
@@ -22,7 +22,7 @@
             onClose: null
         }, options);
 
-        if (options.advanced) {
+        if (options.advanced) { // depricated
             options.showGallery = true;
             options.showTitle = true;
             options.showNumber = true;
@@ -48,6 +48,9 @@
 
         var bufferWait = true, bufferCurrent;
 
+        /**
+         * Создание фрейма
+         */
         function create() {
 
             $shadow = $('.m2b-shadow');
@@ -60,7 +63,6 @@
                     '<img class="m2b-image"><div class="m2b-error"></div><div class="m2b-left"></div><div class="m2b-right"></div>' +
                     '<div class="m2b-btn-close"></div><div class="m2b-title"></div></div>');
                 $frame.appendTo('body');
-
             } else {
                 $frame = $('.m2b-frame');
                 $frame.show();
@@ -71,6 +73,7 @@
 
             $image = $frame.find('.m2b-image');
             $image.hide().load(onImageLoad).click(onImageClick);
+            $frame.click(onImageClick);
 
             $left = $frame.find('.m2b-left');
             $right = $frame.find('.m2b-right');
@@ -95,7 +98,7 @@
                     imageHeight = buffer.naturalHeight;
                     $image.attr('src', buffer.src).show();
                     isReady = true;
-                    preloadNext();
+                    preload();
                 } else {
                     bufferWait = true;
                 }
@@ -106,7 +109,7 @@
                     $image.hide();
                     $spinner.hide();
                     isReady = true;
-                    preloadNext();
+                    preload();
                 }
             };
 
@@ -114,6 +117,9 @@
             $(document).bind('keyup', onKeyup);
         }
 
+        /**
+         * Ресайз окна
+         */
         function onResize() {
             if (isShow) {
                 setImageSize();
@@ -129,6 +135,10 @@
             }
         }
 
+        /**
+         * События клавиатуры
+         * @param e
+         */
         function onKeyup(e) {
             if (isShow) {
                 switch (e.which) {
@@ -145,6 +155,9 @@
             }
         }
 
+        /**
+         * Установить размеры загруженного фото
+         */
         function setImageSize() {
             var fw = $frame.width(),
                 fh = $frame.height(),
@@ -170,6 +183,9 @@
             $image.css({top: top, left: left, width: width, height: height})
         }
 
+        /**
+         * Событие загрузки изображения
+         */
         function onImageLoad() {
             if ($title.html() != '') {
                 showTitle = true;
@@ -188,12 +204,18 @@
             $spinner.hide();
         }
 
+        /**
+         * Клик по изображению или фрейму
+         */
         function onImageClick() {
             if (list.length < 2 || !options.showGallery) {
                 close();
             }
         }
 
+        /**
+         * Загрузка текущего изображения
+         */
         function load() {
             if (options.onBeforeLoad) {
                 options.onBeforeLoad({img: $image});
@@ -211,7 +233,10 @@
             buffer.src = list[current].href;
         }
 
-        function preloadNext() {
+        /**
+         * Предварительная загрузка следующего или предыдущего фото
+         */
+        function preload() {
             if (list.length > 1) {
                 bufferWait = false;
                 bufferCurrent = directional == 1 ? getNextId() : getPrevId();
@@ -219,18 +244,29 @@
             }
         }
 
+        /**
+         * ID предыдущего фото
+         * @returns {number}
+         */
         function getPrevId() {
             var n = current - 1;
             if (n == -1) n = list.length - 1;
             return n;
         }
 
+        /**
+         * ID следующего фото
+         * @returns {number}
+         */
         function getNextId() {
             var n = current + 1;
             if (n == list.length) n = 0;
             return n;
         }
 
+        /**
+         * Загрузить предыдущее фото
+         */
         function loadPrev() {
             if (list.length > 1 && options.showGallery) {
                 directional = 0;
@@ -239,6 +275,9 @@
             }
         }
 
+        /**
+         * Загрузить следующее фото
+         */
         function loadNext() {
             if (list.length > 1 && options.showGallery) {
                 directional = 1;
@@ -247,6 +286,11 @@
             }
         }
 
+        /**
+         * Подпись
+         * @param element
+         * @returns {string}
+         */
         function getTitle(element) {
             var title = '';
             if (options.showNumber && element.rel) {
@@ -256,6 +300,9 @@
             return title + element.title;
         }
 
+        /**
+         * Инициализация плагина
+         */
         function init() {
 
             var $obj;
@@ -306,6 +353,9 @@
             });
         }
 
+        /**
+         * Закрыть просмотр
+         */
         function close() {
             $shadow.hide();
             $frame.hide();
@@ -314,6 +364,7 @@
             $close.unbind('click');
             $image.unbind('load');
             $image.unbind('click');
+            $frame.unbind('click');
             $(window).unbind('resize', onResize);
             $(document).unbind('keyup', onKeyup);
             isShow = false;
