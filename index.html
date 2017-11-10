@@ -26,28 +26,35 @@
 		</div>
 
         <div class="test2">
-            <a href="http://lorempixel.com/300/200/sports/1/" title="aaa" rel="1"><img src="http://lorempixel.com/100/100/sports/1/"></a>
-            <a href="http://lorempixel.com/300/200/sports/2/" title="bbb" rel="2"><img src="http://lorempixel.com/100/100/sports/2/"></a>
-            <a href="http://lorempixel.com/300/200/sports/3/" title="bbb asdf asf asfasf asfjkasfh sfjshfsa fasjhf sfjhaskl fhsa" ><img src="http://lorempixel.com/100/100/sports/3/"></a>
-            <a href="/no-found.jpg"><img src="http://lorempixel.com/100/100/sports/"></a>
+            <img src="http://lorempixel.com/100/100/sports/1/">
+            <img src="http://lorempixel.com/100/100/sports/2/">
+            <img src="http://lorempixel.com/100/100/sports/3/">
+            <img src="http://lorempixel.com/100/100/sports/5/">
+        </div>
+
+        <div class="test3">
+            <a href="http://lorempixel.com/700/700/sports/1/"><img src="http://lorempixel.com/100/100/sports/1/"></a>
+            <a href="http://lorempixel.com/700/700/sports/2/"><img src="http://lorempixel.com/100/100/sports/2/"></a>
+            <a href="http://lorempixel.com/700/700/sports/3/"><img src="http://lorempixel.com/100/100/sports/3/"></a>
+            <a href="http://lorempixel.com/700/700/sports/5/"><img src="http://lorempixel.com/100/100/sports/5/"></a>
         </div>
 
         <button id="show-img" >Показать</button>
 
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 		<script src="/jquery.mrs2000box.js"></script>
 
 		<script>
             $(document).ready(function () {
-                $('.test1').mrs2000box({showGallery: true, onLoad: function (e) {
+                /*$('.test1').mrs2000box({showGallery: true, onLoad: function (e) {
                     //console.log(e);
                     //console.log($(e.object).data('my-id'));
-                }});
-                $('.test2 a').mrs2000box({showGallery: false});
+                }});*/
+                $('.test3').mrs2000box({showGallery: true, showTitle: true, showNumber: false});
 
-                $('#show-img').click(function () {
+/*                $('#show-img').click(function () {
                     $('.test2').mrs2000box('show', 2);
-                })
+                })*/
             });
         </script>
 	</body>

@@ -2,14 +2,12 @@
  *  jQuery плагин для показа изображений
  *
  *  @author Melnikov R.S.
- *  @version 1.0.6
+ *  @version 1.0.7
  */
 
 (function ($) {
 
-    'use strict';
-
-    jQuery.fn.mrs2000box = function (options, params) {
+    $.fn.mrs2000box = function (options, params) {
 
         var $spinner = null;
         var $shadow = null;
@@ -93,7 +91,7 @@
             $spinner = $frame.find('.m2b-spinner');
 
             $image = $frame.find('.m2b-image');
-            $image.hide().load(onImageLoad).click(onImageClick);
+            $image.hide().on('load', onImageLoad).click(onImageClick);
             $frame.click(onImageClick);
 
             $left = $frame.find('.m2b-left');
@@ -201,7 +199,7 @@
             var left = fw * 0.5 - width * 0.5,
                 top = fh * 0.5 - height * 0.5;
 
-            $image.css({top: top, left: left, width: width, height: height})
+            $image.css({top: top, left: left, width: width, height: height});
         }
 
         /**
@@ -341,11 +339,18 @@
             create();
             list = [];
             if (options.showGallery) {
-                $wrapper.find('a').each(function (index, element) {
+
+                var $items = $wrapper.find('a'), attr = 'href';
+                if ($items.length == 0) {
+                    attr = 'src';
+                    $items = $wrapper.find('img');
+                }
+
+                $items.each(function (index, element) {
                     if (element == item) current = index;
                     list.push({
                         object: element,
-                        href: element.href,
+                        href: element[attr],
                         title: getTitle(element)
                     });
                 });
@@ -376,8 +381,9 @@
             var $wrapper = getWrapper(this);
             if ($wrapper) {
                 $wrapper.data('m2b-options', options);
-                $wrapper.on('click', 'a', function (e) {
+                $wrapper.on('click', 'a, img', function (e) {
                     e.preventDefault();
+                    e.stopPropagation();
                     show($wrapper, this);
                 });
             }
