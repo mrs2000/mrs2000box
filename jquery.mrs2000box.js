@@ -38,7 +38,8 @@
                 onBeforeLoad: null,
                 onLoad: null,
                 onResize: null,
-                onClose: null
+                onClose: null,
+                eventSelector: 'a, img'
             }, options);
 
             if (options.advanced) { // depricated
@@ -381,7 +382,7 @@
             var $wrapper = getWrapper(this);
             if ($wrapper) {
                 $wrapper.data('m2b-options', options);
-                $wrapper.on('click', 'a, img', function (e) {
+                $wrapper.on('click', options.eventSelector, function (e) {
                     e.preventDefault();
                     e.stopPropagation();
                     show($wrapper, this);
