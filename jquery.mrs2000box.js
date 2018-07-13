@@ -2,7 +2,7 @@
  *  jQuery плагин для показа изображений
  *
  *  @author Melnikov R.S.
- *  @version 1.0.7
+ *  @version 1.0.8
  */
 
 (function ($) {
@@ -39,7 +39,7 @@
                 onLoad: null,
                 onResize: null,
                 onClose: null,
-                eventSelector: 'a, img'
+                eventSelector: 'a'
             }, options);
 
             if (options.advanced) { // depricated
@@ -61,7 +61,7 @@
                         $a = $wrapper.eq(index);
                     }
                     options = $wrapper.data('m2b-options');
-                    //current = index;
+                    current = index;
                     show($wrapper, $a[0]);
                 }
             }
@@ -179,28 +179,30 @@
          * Установить размеры загруженного фото
          */
         function setImageSize() {
-            var fw = $frame.width(),
-                fh = $frame.height(),
-                s = imageWidth / imageHeight,
-                width, height;
+            setTimeout(function () {
+                var fw = $frame.width(),
+                    fh = $frame.height(),
+                    s = imageWidth / imageHeight,
+                    width, height;
 
-            if (showTitle) {
-                //noinspection JSValidateTypes
-                fh -= $title.outerHeight();
-            }
+                if (showTitle) {
+                    //noinspection JSValidateTypes
+                    fh -= $title.outerHeight();
+                }
 
-            if (s > fw / fh) {
-                width = imageWidth > fw ? fw : imageWidth;
-                height = width / s;
-            } else {
-                height = imageHeight > fh ? fh : imageHeight;
-                width = height * s;
-            }
+                if (s > fw / fh) {
+                    width = imageWidth > fw ? fw : imageWidth;
+                    height = width / s;
+                } else {
+                    height = imageHeight > fh ? fh : imageHeight;
+                    width = height * s;
+                }
 
-            var left = fw * 0.5 - width * 0.5,
-                top = fh * 0.5 - height * 0.5;
+                var left = fw * 0.5 - width * 0.5,
+                    top = fh * 0.5 - height * 0.5;
 
-            $image.css({top: top, left: left, width: width, height: height});
+                $image.css({top: top, left: left, width: width, height: height});
+            }, 50);
         }
 
         /**
@@ -341,14 +343,18 @@
             list = [];
             if (options.showGallery) {
 
-                var $items = $wrapper.find('a'), attr = 'href';
+                var $items = $wrapper.find('a'),
+                    attr = 'href';
+
                 if ($items.length == 0) {
                     attr = 'src';
                     $items = $wrapper.find('img');
                 }
 
                 $items.each(function (index, element) {
-                    if (element == item) current = index;
+                    if (element == item) {
+                        current = index;
+                    }
                     list.push({
                         object: element,
                         href: element[attr],

@@ -1,4 +1,4 @@
-﻿/*
+﻿﻿/*
  * jQuery плагин для показа изображений
  * mrs2000box
  *
@@ -56,7 +56,7 @@
     height: 100px;
     z-index: 10002;
     border-radius: 3px;
-    background: url(/img/mrs2000box/mrs2000box-error.png) no-repeat;
+    background: url(img/mrs2000box/mrs2000box-error.png) no-repeat;
 }
 
 .m2b-left, .m2b-right {
@@ -71,12 +71,12 @@
 
 .m2b-left {
     left: 0;
-    background: url(/img/mrs2000box/mrs2000box-prev.png) no-repeat 5% 50%;
+    background: url(img/mrs2000box/mrs2000box-prev.png) no-repeat 5% 50%;
 }
 
 .m2b-right {
     right: 0;
-    background: url(/img/mrs2000box/mrs2000box-next.png) no-repeat 95% 50%;
+    background: url(img/mrs2000box/mrs2000box-next.png) no-repeat 95% 50%;
 }
 
 .m2b-left:hover, .m2b-right:hover {
@@ -84,7 +84,7 @@
 }
 
 .m2b-btn-close {
-    background: url(/img/mrs2000box/mrs2000box-close.png) no-repeat;
+    background: url(img/mrs2000box/mrs2000box-close.png) no-repeat;
     width: 24px;
     height: 24px;
     cursor: pointer;
@@ -165,4 +165,3 @@
         -webkit-transform: scale(1.0);
     }
 }
-

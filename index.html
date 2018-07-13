@@ -3,7 +3,8 @@
 	<head>
 		<meta charset="utf-8">
 		<title>mrs2000box</title>
-		<link href="/mrs2000box.css" media="all" rel="stylesheet" />
+		<link href="/mrs2000box.css" media="all" rel="stylesheet">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <style>
             html {
                 margin: 0;
@@ -18,11 +19,11 @@
         </style>
 	</head>
 	<body>
-		<div>
-			<a class="test1" href="http://price.novator-group.ru/i/5/e/5ed852.jpg" title="aaa" rel="1"><img src="http://lorempixel.com/200/200/people/1/"></a>
+<!--		<div>
+			&lt;!&ndash;<a class="test1" href="http://price.novator-group.ru/i/5/e/5ed852.jpg" title="aaa" rel="1"><img src="http://lorempixel.com/200/200/people/1/"></a>&ndash;&gt;
             <a class="test1" href="http://lorempixel.com/1300/300/people/2/" data-my-id="ttt" title="bbb" rel="2"><img src="http://lorempixel.com/200/200/people/2/"></a>
             <a class="test1" href="http://lorempixel.com/600/1200/people/3/" title="bbb asdf asf asfasf asfjkasfh sfjshfsa fasjhf sfjhaskl fhsa" ><img src="http://lorempixel.com/200/200/people/3/"></a>
-            <a class="test1" href="/no-found.jpg"><img src="http://lorempixel.com/200/200/people/4/"></a>
+            &lt;!&ndash;<a class="test1" href="/no-found.jpg"><img src="http://lorempixel.com/200/200/people/4/"></a>&ndash;&gt;
 		</div>
 
         <div class="test2">
@@ -30,13 +31,21 @@
             <img src="http://lorempixel.com/100/100/sports/2/">
             <img src="http://lorempixel.com/100/100/sports/3/">
             <img src="http://lorempixel.com/100/100/sports/5/">
-        </div>
+        </div>-->
 
         <div class="test3">
-            <a href="http://lorempixel.com/700/700/sports/1/"><img src="http://lorempixel.com/100/100/sports/1/"></a>
-            <a href="http://lorempixel.com/700/700/sports/2/"><img src="http://lorempixel.com/100/100/sports/2/"></a>
-            <a href="http://lorempixel.com/700/700/sports/3/"><img src="http://lorempixel.com/100/100/sports/3/"></a>
-            <a href="http://lorempixel.com/700/700/sports/5/"><img src="http://lorempixel.com/100/100/sports/5/"></a>
+            <a href="https://picsum.photos/800/600?image=0" title="aaaa"><img src="https://picsum.photos/100/100?image=0"></a>
+            <a href="https://picsum.photos/800/600?image=11"><img src="https://picsum.photos/100/100?image=11"></a>
+            <a href="https://picsum.photos/800/600?image=22"><img src="https://picsum.photos/100/100?image=22"></a>
+            <a href="https://picsum.photos/800/600?image=33"><img src="https://picsum.photos/100/100?image=33"></a>
+            <a href="https://picsum.photos/800/600?image=44"><img src="https://picsum.photos/100/100?image=44"></a>
+        </div>
+
+        <div>
+            <a href="https://picsum.photos/800/600?image=12" class="test2"><img src="https://picsum.photos/100/100?image=12"></a>
+            <a href="https://picsum.photos/800/600?image=24" class="test2"><img src="https://picsum.photos/100/100?image=24"></a>
+            <a href="https://picsum.photos/800/600?image=35" class="test2"><img src="https://picsum.photos/100/100?image=35"></a>
+            <a href="https://picsum.photos/800/600?image=46" class="test2"><img src="https://picsum.photos/100/100?image=46"></a>
         </div>
 
         <button id="show-img" >Показать</button>
@@ -52,9 +61,11 @@
                 }});*/
                 $('.test3').mrs2000box({showGallery: true, showTitle: true, showNumber: false});
 
-/*                $('#show-img').click(function () {
-                    $('.test2').mrs2000box('show', 2);
-                })*/
+                $('#show-img').click(function () {
+                    $('.test3').mrs2000box('show', 2);
+                });
+
+                //$('.test2').mrs2000box();
             });
         </script>
 	</body>
